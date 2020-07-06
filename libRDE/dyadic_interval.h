@@ -152,7 +152,7 @@ public:
 
 	/// the dyadic interval of length 2^-(resolution) containing the numerical value arg
 	/// will overflow if 2^(resolution) * arg cannot be represented as a k_t integer
-	basic_dyadic_interval(double arg, n_t resolution)
+	basic_dyadic_interval(double arg, n_t resolution) : cmp{}
 	{
 		dyadic_t out;
 		auto rescaled_arg = ldexp(arg, resolution);
