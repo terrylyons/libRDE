@@ -31,13 +31,16 @@ class Path :
 	public BasePath<my_alg_type>
 {
 public:
+	
+	typedef typename my_alg_type::LIE LIE;
+	
 	/// Trivial constructor.
-	Path(void) : pImpl(std::tr1::shared_ptr< const DefaultPath<my_alg_type> > (new DefaultPath<my_alg_type>))
+	Path(void) : pImpl(std::shared_ptr< const DefaultPath<my_alg_type> > (new DefaultPath<my_alg_type>))
 	{
 	}; 
 
 	/// Constructor from pointer to implementation.
-	Path(std::tr1::shared_ptr < const BasePath<my_alg_type> > pimpl1) : pImpl(pimpl1)
+	Path(std::shared_ptr < const BasePath<my_alg_type> > pimpl1) : pImpl(pimpl1)
 	{
 	};
 
@@ -66,7 +69,7 @@ public:
 
 private:
 	/// The pointer to the implementation.
-	std::tr1::shared_ptr < const BasePath<my_alg_type> > pImpl;
+	std::shared_ptr < const BasePath<my_alg_type> > pImpl;
 
 }; //END CLASS DEFINITION Path
 
