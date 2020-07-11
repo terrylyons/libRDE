@@ -71,6 +71,7 @@ class Increment : public FamilyConnections<my_alg_type>
 	static const unsigned myDIM = my_alg_type::myDIM;
 	static const unsigned ALPHABET_SIZE = my_alg_type::ALPHABET_SIZE;
 
+	typedef std::map < dyadic_interval, Increment<my_alg_type> > DataTree;
 protected:
 	/// The increment.
 	LIE _LieValue;
