@@ -15,6 +15,9 @@ Version 3. (See accompanying file License.txt)
 #ifndef __FRACTBROWNIANPATH__
 #define __FRACTBROWNIANPATH__
 
+typedef int integer;
+typedef double doublereal;
+
 // Check windows
 #include "lapack_defns.h"
 
