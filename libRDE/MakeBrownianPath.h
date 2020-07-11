@@ -24,14 +24,14 @@ Version 3. (See accompanying file License.txt)
 template <typename my_alg_type>
 Path<my_alg_type> MakeBrownianPath()
 {
-	std::tr1::shared_ptr< const BrownianPath<my_alg_type> > p(new BrownianPath<my_alg_type>());
+	std::shared_ptr< const BrownianPath<my_alg_type> > p(new BrownianPath<my_alg_type>());
 	return Path<my_alg_type>(p);
 };
 
 template <typename my_alg_type>
 Path<my_alg_type> MakeBrownianPath( NormalRandomNumberGenerator & rand, unsigned int d = my_alg_type::myDIM )
 {
-	std::tr1::shared_ptr< const BrownianPath<my_alg_type> > p(new BrownianPath<my_alg_type>(rand,d));
+	std::shared_ptr< const BrownianPath<my_alg_type> > p(new BrownianPath<my_alg_type>(rand,d));
 	return Path<my_alg_type>(p);
 };
 
