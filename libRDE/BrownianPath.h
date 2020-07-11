@@ -29,6 +29,21 @@ class BrownianPath :
 	public DynamicallyConstructedPath<my_alg_type>
 {
 
+	typedef typename my_alg_type::TENSOR TENSOR;
+	typedef typename my_alg_type::LIE LIE;
+	typedef typename my_alg_type::MAPS MAPS;
+	typedef typename my_alg_type::CBH CBH;
+	typedef typename my_alg_type::SCA SCA;
+	typedef typename my_alg_type::S S;
+	typedef typename my_alg_type::LET LET;
+	typedef typename my_alg_type::DEG DEG;
+
+	typedef std::map < dyadic_interval, Increment<my_alg_type> > DataTree;
+	typedef typename DataTree::iterator Iterator;
+	typedef typename DataTree::const_iterator ConstIterator;
+
+	static const unsigned myDIM = my_alg_type::myDIM;
+
 	/// Default NormalRandomNumberGenerator - used if another is not specified in the constructor.
 	static NormalRandomNumberGenerator vgCommonNormal;
 
