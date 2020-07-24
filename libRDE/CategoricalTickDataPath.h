@@ -186,8 +186,8 @@ public:
 	void add_event(double time_stamp, alg::LET letter)
 	{
 		std::vector<double> time_stamps;
-		time_stamps.push_back(timestamp);
-		delete_shadow(timestamps);
+		time_stamps.push_back(time_stamp);
+		delete_shadow(time_stamps);
 		TickData.insert(make_pair(time_stamp, letter));
 	}
 
