@@ -89,10 +89,10 @@ public:
 	static const IntervalType intervaltype{ interval_t };
 	static const IntervalType reverseintervaltype{ (interval_t == opencl) ? clopen : opencl };
 	typedef DYADIC dyadic_t;
-
-private:
 	typedef typename dyadic_t::k_t k_t;
 	typedef typename dyadic_t::n_t n_t;
+private:
+
 	typedef Compare<interval_t> compare;
 	const compare cmp;
 
@@ -395,7 +395,7 @@ private:
 	/// Outputs a dyadic interval in the form [double, double) to an std::ostream.
 	friend inline std::ostream& operator << (std::ostream & os, const basic_dyadic_interval & rhs)
 	{
-		switch (rhs.interval_t)
+		switch (rhs.intervaltype)
 		{
 		case clopen:	os << "[" << (double)rhs.inf() << ", " << (double)rhs.sup() << ")"; break;
 		case opencl:	os << "(" << (double)rhs.inf() << ", " << (double)rhs.sup() << "]"; break;
