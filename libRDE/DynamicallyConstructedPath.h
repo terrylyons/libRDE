@@ -28,6 +28,7 @@ template <typename my_alg_type>
 class DynamicallyConstructedPath :
 	public BasePath<my_alg_type>
 {
+public:
 	typedef std::map < dyadic_interval, Increment<my_alg_type> > DataTree;
 	typedef typename my_alg_type::MAPS MAPS;
 	typedef typename my_alg_type::CBH CBH;
