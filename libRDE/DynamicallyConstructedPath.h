@@ -233,7 +233,7 @@ private:
 
 		if (itPair.first != itPair.second) 
 		{
-			// increment already in mPathData to low accuracy		
+			// increment already in mPathData to low accuracy
 
 			const Iterator & 
 				itCurrent = itPair.first;
@@ -298,7 +298,7 @@ private:
 		while (!((itRoot->first).contains(increment)))
 		{
 			// move root up
-
+	
 			const dyadic_interval & diOldRoot = itRoot->first;
 			Increment<my_alg_type> & nvOldRoot = itRoot->second;
 
