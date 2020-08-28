@@ -67,6 +67,16 @@ public:
 		return pImpl->DescribePath(inf, sup, tolerance);
 	};
 
+	Path RestrictPath(const interval& interval) const
+	{
+		return Path(new RestrictedPath(pImpl, interval));	
+	}
+
+	Path Concatenate(const Path& other) const
+	{
+		return Path(new ConcatenatedPath(pImpl, other.pImpl));
+	}
+
 private:
 	/// The pointer to the implementation.
 	std::shared_ptr < const BasePath<my_alg_type> > pImpl;
