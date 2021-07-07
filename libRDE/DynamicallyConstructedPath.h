@@ -28,7 +28,16 @@ template <typename my_alg_type>
 class DynamicallyConstructedPath :
 	public BasePath<my_alg_type>
 {
+public:
 	typedef std::map < dyadic_interval, Increment<my_alg_type> > DataTree;
+	typedef typename my_alg_type::MAPS MAPS;
+	typedef typename my_alg_type::CBH CBH;
+	typedef typename my_alg_type::LIE LIE;
+	typedef typename my_alg_type::S S;
+	typedef typename my_alg_type::TENSOR TENSOR;
+	typedef typename my_alg_type::SCA SCA;
+	typedef typename my_alg_type::LET LET;
+	typedef typename my_alg_type::DEG DEG;
 
 private:
 
@@ -138,11 +147,11 @@ private:
 
 		Iterator itLeft = mPathData.insert(
 			itLeafAbove, //hint to position
-			DataTree::value_type(diLeft,nvLeft) // the interval and its data
+			typename DataTree::value_type(diLeft,nvLeft) // the interval and its data
 			);
 		Iterator itRight = mPathData.insert(
 			itLeft, //hint to position
-			DataTree::value_type(diRight,nvRight) // the interval and its data
+			typename DataTree::value_type(diRight,nvRight) // the interval and its data
 			);
 	
 		itLeft->second.mitSibling=itRight;
@@ -192,8 +201,8 @@ private:
 				int iAccuracyAvailable = std::min(nvBelow.Accuracy(), nvSibling.Accuracy());
 				if ( nvParent.Accuracy() <  iAccuracyAvailable )
 				{
-					std::vector <LIE*> 
-						pincs(std::vector<LIE*>::size_type(2));
+					std::vector <const LIE*> 
+						pincs(typename std::vector<LIE*>::size_type(2));
 					if (diBelow.aligned())
 					{
 						pincs[0]= & nvBelow.LieValue();
@@ -224,7 +233,7 @@ private:
 
 		if (itPair.first != itPair.second) 
 		{
-			// increment already in mPathData to low accuracy		
+			// increment already in mPathData to low accuracy
 
 			const Iterator & 
 				itCurrent = itPair.first;
@@ -289,7 +298,7 @@ private:
 		while (!((itRoot->first).contains(increment)))
 		{
 			// move root up
-
+	
 			const dyadic_interval & diOldRoot = itRoot->first;
 			Increment<my_alg_type> & nvOldRoot = itRoot->second;
 
@@ -300,9 +309,9 @@ private:
 				?diNeighbour.shrink_interval_right()
 				:diNeighbour.shrink_interval_left();
 
-			Iterator itNeighbour = mPathData.insert( itRoot, DataTree::value_type(diNeighbour, Increment<my_alg_type>(diNeighbour,mPathData.end(),mPathData.end()) ) );
+			Iterator itNeighbour = mPathData.insert( itRoot, typename DataTree::value_type(diNeighbour, Increment<my_alg_type>(diNeighbour,mPathData.end(),mPathData.end()) ) );
 			Increment<my_alg_type> & nvNeighbour = itNeighbour->second;
-			Iterator itNewRoot = mPathData.insert( itRoot, DataTree::value_type(diNewRoot, Increment<my_alg_type>(diNewRoot,mPathData.end(),mPathData.end()) ) );
+			Iterator itNewRoot = mPathData.insert( itRoot, typename DataTree::value_type(diNewRoot, Increment<my_alg_type>(diNewRoot,mPathData.end(),mPathData.end()) ) );
 			Increment<my_alg_type> & nvNewRoot = itNewRoot->second;
 			nvOldRoot.mitSibling = itNeighbour;
 			nvOldRoot.mitParent = itNewRoot;
@@ -325,7 +334,7 @@ private:
 		Increment<my_alg_type> nvData(increment,mPathData.end(),mPathData.end());
 
 		Iterator itRoot = mPathData.insert(
-			DataTree::value_type (increment,nvData) 
+			typename DataTree::value_type (increment,nvData) 
 			).first;
 		// update the Lie Value using the model specific helper function
 		itRoot->second.LieValue(MakeRootLieIncrement(increment));

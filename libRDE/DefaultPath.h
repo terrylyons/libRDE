@@ -24,8 +24,10 @@ template <typename my_alg_type>
 class DefaultPath :
 	public BasePath<my_alg_type>
 {
-
 public:
+
+	typedef typename my_alg_type::LIE LIE;
+
 	DefaultPath(void)
 	{
 	};

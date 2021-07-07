@@ -28,7 +28,7 @@ enum IntervalType : int16_t {
 /// a comparison operator that always has the contained element as the least element in the interval
 /// for a clopen interval this is the standard less operator, for opencl it is reversed
 template <IntervalType intervaltype>
-struct compare
+struct Compare
 {
 	template <class T>
 	bool operator() (T lhs, T rhs)const
@@ -89,11 +89,11 @@ public:
 	static const IntervalType intervaltype{ interval_t };
 	static const IntervalType reverseintervaltype{ (interval_t == opencl) ? clopen : opencl };
 	typedef DYADIC dyadic_t;
-
-private:
 	typedef typename dyadic_t::k_t k_t;
 	typedef typename dyadic_t::n_t n_t;
-	typedef compare<interval_t> compare;
+private:
+
+	typedef Compare<interval_t> compare;
 	const compare cmp;
 
 public:
@@ -127,7 +127,7 @@ public:
 
 public:
 	basic_dyadic_interval(dyadic_t s)
-		: dyadic_t(s)
+		: dyadic_t(s), cmp{}
 	{
 	}
 	basic_dyadic_interval(k_t k1, n_t n1)
@@ -136,7 +136,7 @@ public:
 	}
 
 	/// the dyadic interval of length 2^-(resolution) containing the dyadic value arg
-	basic_dyadic_interval(dyadic_t arg, n_t resolution)
+	basic_dyadic_interval(dyadic_t arg, n_t resolution) : cmp{}
 	{
 		bool isint = arg.rebase(resolution); // set in greatest denominator so k is integer and denom <= 2^resolution
 		if (!isint)
@@ -152,22 +152,22 @@ public:
 
 	/// the dyadic interval of length 2^-(resolution) containing the numerical value arg
 	/// will overflow if 2^(resolution) * arg cannot be represented as a k_t integer
-	basic_dyadic_interval(double arg, n_t resolution)
+	basic_dyadic_interval(double arg, n_t resolution) : cmp{}
 	{
-		basic_dyadic out;
+		dyadic_t out;
 		auto rescaled_arg = ldexp(arg, resolution);
 		assert(double(std::numeric_limits<k_t>::max()) > abs(rescaled_arg));
 		switch (interval_t)
 		{
-		case opencl: out = basic_dyadic{ (k_t)ceil(rescaled_arg), resolution }; break;
-		case clopen: out = basic_dyadic{ (k_t)floor(rescaled_arg), resolution }; break;
+		case opencl: out = dyadic_t{ (k_t)ceil(rescaled_arg), resolution }; break;
+		case clopen: out = dyadic_t{ (k_t)floor(rescaled_arg), resolution }; break;
 		}
 		dyadic_t::operator = (out);
 	}
 
 	/// the dyadic interval of length 2^-(resolution) containing the numerical value arg
 	/// with the largest resolution so that 2^(resolution) * arg can be represented as a k_t integer
-	explicit basic_dyadic_interval(double arg)
+	explicit basic_dyadic_interval(double arg) : cmp{}
 	{
 		double temp = abs(arg) / double(std::numeric_limits<k_t>::max());
 		if (temp == 0)
@@ -270,7 +270,7 @@ public:
 	/// interval at that level to contain the current interval.
 	basic_dyadic_interval & expand_interval(k_t Arg = 1)
 	{
-		return operator = (typename basic_dyadic_interval(included_end(), n - Arg));
+		return operator = (basic_dyadic_interval<interval_t, dyadic_t>(included_end(), n - Arg));
 	}
 
 	/// total comparison operator for dyadic intervals
@@ -333,7 +333,7 @@ public:
 		return temp;
 	}
 private:
-
+/*
 	/// Explicit constructors that when given a dyadic or double and an interval type returns the closest dyadic with n = tolerance
 	/// whose value is just larger ( (] case) or smaller ( [) case) or equal to that of the dyadic or double and so that the relevant
 	/// interval containing the new dyadic contains the numerical value of the constructing number;
@@ -391,11 +391,11 @@ private:
 			n = tolerance;
 		}
 	}
-
+*/
 	/// Outputs a dyadic interval in the form [double, double) to an std::ostream.
 	friend inline std::ostream& operator << (std::ostream & os, const basic_dyadic_interval & rhs)
 	{
-		switch (rhs.interval_t)
+		switch (rhs.intervaltype)
 		{
 		case clopen:	os << "[" << (double)rhs.inf() << ", " << (double)rhs.sup() << ")"; break;
 		case opencl:	os << "(" << (double)rhs.inf() << ", " << (double)rhs.sup() << "]"; break;
@@ -426,7 +426,7 @@ to_dyadic_intervals(double inf, double sup, int tolerance, IntervalType unused)
 		begin.k += di::unit;
 	};
 
-	auto store_ = [](std::list<di> &intervals, std::list<di>::iterator p, di end) -> std::list<di>::iterator
+	auto store_ = [](std::list<di> &intervals, typename std::list<di>::iterator p, di end) -> typename std::list<di>::iterator
 	{
 		p = intervals.insert(p, end.shrink_to_contained_end());
 		return p;
@@ -465,12 +465,12 @@ typedef basic_dyadic_interval<DEFAULT_DYADIC_INTERVAL_TYPE, dyadic> dyadic_inter
 /// clopen or opencl. Individual intervals are represented internally by their sup, inf,
 /// and this tag. The template generates different types for clopen and opencl intervals
 /// and they do not communicate.
-template<IntervalType intervaltype, class SCALAR>
+template<IntervalType Intervaltype, class SCALAR>
 class basic_interval {
 public:
 	typedef SCALAR scalar_t;
-	static const IntervalType intervaltype{ intervaltype };
-	typedef compare<intervaltype> compare;
+	static const IntervalType intervaltype{ Intervaltype };
+	typedef Compare<intervaltype> compare;
 	const compare cmp;
 
 	scalar_t excluded_end() const { return (intervaltype == clopen) ? m_sup : m_inf; }
@@ -496,7 +496,8 @@ public:
 	// constructors
 	basic_interval(std::pair < scalar_t, scalar_t > arg) :
 		m_inf{ std::min(arg.first, arg.second) },
-		m_sup{ std::max(arg.first, arg.second) }
+		m_sup{ std::max(arg.first, arg.second) },
+		cmp {}
 	{}
 	basic_interval(scalar_t first, scalar_t second) :
 		basic_interval{ std::make_pair(first, second) }

@@ -13,7 +13,7 @@ Version 3. (See accompanying file License.txt)
 #include "NormalRandomNumberGenerator.h"
 
 extern "C" {
-//#include "SFMT.h"
+#include "SFMT.h"
 }
 
 #include <cmath>

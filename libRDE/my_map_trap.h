@@ -8,12 +8,12 @@
 namespace tjl
 {
 	//NOTE THAT THIS NEEDS MODIFICATION FOR CLANG COMPILER which does not construct or destroy items of type value_type
-	template <typename MAP, typename MIRROR>
+	template <typename MAP_T, typename MIRROR_T>
 	class my_map_trap
 	{
 	public:
-		typedef typename MIRROR MIRROR;
-		typedef typename MAP MAP;
+		typedef MIRROR_T MIRROR;
+		typedef MAP_T MAP;
 		typedef my_map_trap<MAP, MIRROR> TRAP;
 		typedef typename MAP::key_type key_type;
 		typedef typename MAP::mapped_type mapped_type;
@@ -38,10 +38,10 @@ namespace tjl
 		template <typename  U, typename TRAP_T, const TRAP_T* V> friend struct trap_alloc;
 
 		// the value types of MAP and MIRROR must be convertible
-		typename typename MIRROR::value_type convert(const value_type& arg) const {
+		typename MIRROR::value_type convert(const value_type& arg) const {
 			return arg.first;
 		}
-		typename typename MIRROR::value_type convert(value_type&& arg) const {
+		typename MIRROR::value_type convert(value_type&& arg) const {
 			return arg.first;
 		}
 

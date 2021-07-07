@@ -22,7 +22,7 @@ namespace tjl
 	template <typename  A, typename TRAP_T, const TRAP_T* p_trap>
 	struct trap_alloc : private std::allocator<A>
 	{
-		template <typename  U, typename TRAP_T, const TRAP_T* V> friend struct trap_alloc;
+		template <typename  U, typename TRAP_T1, const TRAP_T1* V> friend struct trap_alloc;
 		
 		typedef std::allocator<A> base;
 

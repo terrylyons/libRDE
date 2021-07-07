@@ -15,6 +15,8 @@ Version 3. (See accompanying file License.txt)
 
 #include "dyadic_interval.h"
 #include <deque>
+#include <vector>
+
 
 /// A common ancestor for all given paths.
 
@@ -43,7 +45,7 @@ public:
 	/// The description of the path
 
 	/// Describe the path over a dyadic interval by a Lie element
-	LIE virtual DescribePath(const dyadic_interval &increment, const int accuracy) const = 0
+	virtual LIE DescribePath(const dyadic_interval &increment, const int accuracy) const
 	{
 		return LIE();
 	};
@@ -62,7 +64,7 @@ public:
 	{
 		std::deque<dyadic_interval> stack = to_dyadic_intervals<dyadic_interval::intervaltype, dyadic>(inf, sup, tolerance, dyadic_interval::intervaltype);
 		std::vector <LIE > incs;
-		std::vector <LIE* > pincs;
+		std::vector <const LIE* > pincs;
 		for (std::deque<dyadic_interval>::iterator it = stack.begin(); it != stack.end(); ++it)
 		{
 			LIE temp = DescribePath(*it, tolerance);
